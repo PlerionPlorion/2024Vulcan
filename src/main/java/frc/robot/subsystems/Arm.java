@@ -96,7 +96,7 @@ public class Arm extends SubsystemBase{
   }
 
   public double getVelocityFF(double velocity) {
-    return velocity * (Constants.ArmConstants.K_V + Constants.ArmConstants.K_S);
+    return velocity * (Constants.ArmConstants.K_V) + (Math.signum(velocity) * Constants.ArmConstants.K_S);
   }
 
   public void setPIDFF(double angle, double ffVolts) {
