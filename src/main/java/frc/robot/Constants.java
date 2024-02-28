@@ -155,7 +155,7 @@ public final class Constants {
    * radians per second, rad/s^2
    */
   public static final Constraints CONSTRAINTS = new Constraints(
-    10, 5);
+    15, 10);
       }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

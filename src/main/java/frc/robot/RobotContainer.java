@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.exampleAuto;
+import frc.robot.commands.TeleopArm;
 import frc.robot.commands.TeleopIntake;
 import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.TeleopSwerve;
@@ -27,7 +27,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Arm Arm = new Arm();
+    private final Arm arm = new Arm();
     public final Shooter shooter = new Shooter();
     public final Intake intake = new Intake();
     public final IntakePivot intakePivot = new IntakePivot();
@@ -80,21 +80,23 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        ArmPosition1.onTrue(Commands.runOnce(()->{
-            // Degrees
-            Arm.setAngle(90);
-        },
-        Arm));
-        ArmPosition2.onTrue(Commands.runOnce(()->{
-            Arm.setAngle(0);
+        // ArmPosition1.onTrue(Commands.runOnce(()->{
+        //     // Degrees
+        //     Arm.setAngle(90);
+        // },
+        // Arm));
+        // ArmPosition2.onTrue(Commands.runOnce(()->{
+        //     Arm.setAngle(0);
 
-        },
-        Arm));
-        intakeButton.onTrue(new TeleopIntake(intake, 1, 0.3));
-        shootButton.onTrue(new TeleopShooter(shooter, 1, 1));
-        sameShoot.onTrue(new ParallelCommandGroup(new TeleopShooter(shooter, 1, 3), new TeleopIntake(intake, 1, 3)));
-        intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
-        intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
+        // },
+        // Arm));
+        intakeButton.onTrue(new TeleopIntake(intake, 0.5, 0.3));
+        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 1, 2)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 1, 1))));
+        sameShoot.onTrue(new ParallelCommandGroup(new TeleopShooter(shooter, 1, 3), new TeleopIntake(intake, 0.5, 3)));
+        // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
+        // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
+        ArmPosition1.onTrue(new TeleopArm(arm, intakePivot, -60, 100));
+        ArmPosition2.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
     }
 
     /**

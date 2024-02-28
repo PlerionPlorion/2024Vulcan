@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,7 @@ public class Climber extends SubsystemBase {
   TalonFX climberFX;
   CurrentLimitsConfigs supplyLimit = new CurrentLimitsConfigs();
   double encoderDouble;
+  final PositionVoltage request = new PositionVoltage(0).withSlot(0);
   /** Creates a new Climber. */
   public Climber() {
     climberFX = new TalonFX(10);
@@ -24,9 +26,10 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
   public void climb(double speed) {
     encoderDouble += 100 * speed;
-    climberFX.setPosition(encoderDouble);
+    climberFX.setControl(request.withPosition(speed));
   }
 }

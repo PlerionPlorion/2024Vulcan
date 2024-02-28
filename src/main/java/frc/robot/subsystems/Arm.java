@@ -34,29 +34,35 @@ public class Arm extends SubsystemBase{
   private SparkPIDController controllerRight = rightArmMotor.getPIDController();
   public final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(
   Constants.ArmConstants.K_S, Constants.ArmConstants.K_V, Constants.ArmConstants.K_A);
-
   public Arm() {
     trapProfile = new TrapezoidProfile(Constants.ArmConstants.CONSTRAINTS);
     rightArmMotor.setInverted(true);
-    controllerLeft.setP(0);
-    controllerLeft.setI(0);
-    controllerLeft.setD(0);
+    controllerLeft.setP(0.001);
+    controllerLeft.setI(0.0001);
+    controllerLeft.setD(0.001);
     controllerLeft.setFF(0);
-    controllerRight.setP(0);
-    controllerRight.setI(0);
-    controllerRight.setD(0);
+    controllerRight.setP(0.001);
+    controllerRight.setI(0.0001);
+    controllerRight.setD(0.001);
     controllerRight.setFF(0);
     leftArmMotor.setSmartCurrentLimit(30);
     rightArmMotor.setSmartCurrentLimit(30);
     leftEncoder.setPosition(leftEncoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("GFF", 0.5);
-    SmartDashboard.putNumber("targetVelocity", 0);
-    SmartDashboard.putNumber("VFF", 0);
-    SmartDashboard.putNumber("K_S", 0.7);
+    // SmartDashboard.putNumber("GFF", 0.5);
+    // SmartDashboard.putNumber("targetVelocity", 0);
+    // SmartDashboard.putNumber("VFF", 0);
+    // SmartDashboard.putNumber("K_S", 0.7);
   }
   public void periodic() {
     if(DriverStation.isEnabled()) {
       setpoint = trapProfile.calculate(0.02, setpoint, desiredState);
+
+      if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.1) {
+      setpoint.position = -leftEncoder.getPosition().getValueAsDouble()*2;
+      SmartDashboard.putBoolean("running", true);
+      } else {
+        SmartDashboard.putBoolean("running", false);
+      }
       ffVolts = getGravityFF() + getVelocityFF(setpoint.velocity);
       //setPIDFF(setpoint.position, ffVolts);
       setVolts(ffVolts);
@@ -68,14 +74,15 @@ public class Arm extends SubsystemBase{
       setVolts(0);
     }
     //setVolts(getGravityFF() + Constants.ArmConstants.K_V * 5 + Constants.ArmConstants.K_S);
-    SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition().getValueAsDouble()*90);
-    SmartDashboard.putNumber("ffVolts", ffVolts);
+    // SmartDashboard.putNumber("ffVolts", ffVolts);
     SmartDashboard.putNumber("Setpoint", setpoint.position);
     SmartDashboard.putNumber("SetpointVelocity", setpoint.velocity);
-    SmartDashboard.putNumber("leftEncRelative", -leftEncoder.getPosition().getValueAsDouble()*90);
-    SmartDashboard.putNumber("leftEncoderVelocity", (-leftEncoder.getVelocity().getValueAsDouble()*90));
-    SmartDashboard.putNumber("VoltageLeft", leftArmMotor.getAppliedOutput());
-    SmartDashboard.putNumber("VoltageRight", rightArmMotor.getAppliedOutput());
+    SmartDashboard.putNumber("leftEncRelative", -leftEncoder.getPosition().getValueAsDouble()*2);
+    SmartDashboard.putNumber("DesiredState", desiredState.position);
+    SmartDashboard.putNumber("EncoderDiff", Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)));
+    // SmartDashboard.putNumber("leftEncoderVelocity", (-leftEncoder.getVelocity().getValueAsDouble()*90));
+    // SmartDashboard.putNumber("VoltageLeft", leftArmMotor.getAppliedOutput());
+    // SmartDashboard.putNumber("VoltageRight", rightArmMotor.getAppliedOutput());
   }
 
   public void setAngle(double angle) {
@@ -91,7 +98,7 @@ public class Arm extends SubsystemBase{
   }
 
   public double getGravityFF() {
-    //return Constants.ArmConstants.K_G * Math.sin(-leftEncoder.getPosition().getValueAsDouble()*360/Constants.ArmConstants.MOTOR_ROTATIONS_PER_ARM_ROTATION);
+    //return SmartDashboard.getNumber("GFF", 0) * Math.sin(-leftEncoder.getPosition().getValueAsDouble()*360/Constants.ArmConstants.MOTOR_ROTATIONS_PER_ARM_ROTATION);
     return Constants.ArmConstants.K_G * Math.sin(-leftEncoder.getPosition().getValueAsDouble()*360/Constants.ArmConstants.MOTOR_ROTATIONS_PER_ARM_ROTATION);
   }
 

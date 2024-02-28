@@ -22,4 +22,8 @@ public class Intake extends SubsystemBase {
   public void intake(double speed) {
     intakeMotor.set(speed);
   }
+  public void retract() {
+    intakeMotor.set(-0.1);
+    
+  }
 }
