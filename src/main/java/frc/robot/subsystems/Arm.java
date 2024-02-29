@@ -57,7 +57,7 @@ public class Arm extends SubsystemBase{
     if(DriverStation.isEnabled()) {
       setpoint = trapProfile.calculate(0.02, setpoint, desiredState);
 
-      if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.1) {
+      if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.2) {
       setpoint.position = -leftEncoder.getPosition().getValueAsDouble()*2;
       SmartDashboard.putBoolean("running", true);
       } else {

@@ -32,17 +32,25 @@ public class TeleopIntake extends Command {
   @Override
   public void execute() {
     double intakeSpeedVal = intakeSpeedSup;
+    if(target != 0) {
     if(counter < target) {
       counter++;
       intake.intake(intakeSpeedVal);
     }
+  } else {
+    intake.intake(intakeSpeedVal);
+  }
     SmartDashboard.putNumber("counter", counter);
   }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+      if(target != 0) {
       return counter >= target;
+      } else {
+        return false;
+      }
     }
 
   // Called once the command ends or is interrupted.

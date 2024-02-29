@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.TeleopArm;
+import frc.robot.commands.TeleopClimb;
 import frc.robot.commands.TeleopIntake;
 import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Shooter;
@@ -31,7 +33,8 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Intake intake = new Intake();
     public final IntakePivot intakePivot = new IntakePivot();
-   // public final Climber climber = new Climber();
+    public final Climber climber = new Climber();
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
@@ -44,31 +47,32 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton ArmPosition1 = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton ArmPosition2 = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton IntakePos = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton ArmZero = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton sameShoot = new JoystickButton(operator, XboxController.Button.kBack.value);
-    private final JoystickButton intakeZero = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-
+    private final JoystickButton spit = new JoystickButton(operator, 7);
+    private final JoystickButton forceIntake = new JoystickButton(operator, 8);
+    private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    //private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                s_Swerve,
+                () -> -driver.getRawAxis(translationAxis),
+                () -> -driver.getRawAxis(strafeAxis),
+                () -> -driver.getRawAxis(rotationAxis),
                 () -> robotCentric.getAsBoolean()
             )
         );
-        // climber.setDefaultCommand(
-        //     new TeleopClimb(climber,
-        //      () -> operator.getRawAxis(climbAxis))
-        // );
+        climber.setDefaultCommand(
+            new TeleopClimb(climber,
+             () -> -operator.getRawAxis(climbAxis))
+        );
         // Configure the button bindings
         configureButtonBindings();
+
     }
 
     /**
@@ -80,23 +84,25 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        // ArmPosition1.onTrue(Commands.runOnce(()->{
+        // IntakePos.onTrue(Commands.runOnce(()->{
         //     // Degrees
         //     Arm.setAngle(90);
         // },
         // Arm));
-        // ArmPosition2.onTrue(Commands.runOnce(()->{
+        // ArmZero.onTrue(Commands.runOnce(()->{
         //     Arm.setAngle(0);
 
         // },
         // Arm));
-        intakeButton.onTrue(new TeleopIntake(intake, 0.5, 0.3));
-        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 1, 2)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 1, 1))));
-        sameShoot.onTrue(new ParallelCommandGroup(new TeleopShooter(shooter, 1, 3), new TeleopIntake(intake, 0.5, 3)));
+        intakeButton.onTrue(new TeleopIntake(intake, 1, 0.3));
+        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 2)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
+        spit.whileTrue(new TeleopIntake(intake, -1, 0));
+        forceIntake.whileTrue(new TeleopIntake(intake, 1, 0));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
         // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
-        ArmPosition1.onTrue(new TeleopArm(arm, intakePivot, -60, 100));
-        ArmPosition2.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
+        IntakePos.onTrue(new TeleopArm(arm, intakePivot, -50, 99));
+        ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
+        amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25), new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1)).andThen(new TeleopIntake(intake, -0.3, 1)));
     }
 
     /**

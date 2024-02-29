@@ -29,7 +29,6 @@ public class Climber extends SubsystemBase {
     
   }
   public void climb(double speed) {
-    encoderDouble += 100 * speed;
-    climberFX.setControl(request.withPosition(speed));
+    climberFX.set(speed);
   }
 }

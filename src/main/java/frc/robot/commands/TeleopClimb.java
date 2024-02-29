@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
 
@@ -28,7 +29,7 @@ public class TeleopClimb extends Command {
   @Override
   public void execute() {
     
-    double climbPositionVal = climbPositionSup.getAsDouble();
+    double climbPositionVal = MathUtil.applyDeadband(climbPositionSup.getAsDouble(), 0.2);
     climb.climb(climbPositionVal);
   }
 
