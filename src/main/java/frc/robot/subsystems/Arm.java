@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase{
     controllerRight.setFF(0);
     leftArmMotor.setSmartCurrentLimit(30);
     rightArmMotor.setSmartCurrentLimit(30);
-    leftEncoder.setPosition(leftEncoder.getAbsolutePosition().getValueAsDouble());
+    leftEncoder.setPosition(leftEncoder.getAbsolutePosition().getValueAsDouble()); //The arm knows where it is
     // SmartDashboard.putNumber("GFF", 0.5);
     // SmartDashboard.putNumber("targetVelocity", 0);
     // SmartDashboard.putNumber("VFF", 0);
@@ -57,8 +57,8 @@ public class Arm extends SubsystemBase{
     if(DriverStation.isEnabled()) {
       setpoint = trapProfile.calculate(0.02, setpoint, desiredState);
 
-      if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.2) {
-      setpoint.position = -leftEncoder.getPosition().getValueAsDouble()*2;
+      if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.2) { //It subtracts where it wants to go from where it is
+      setpoint.position = -leftEncoder.getPosition().getValueAsDouble()*2; //The arm is where it is
       SmartDashboard.putBoolean("running", true);
       } else {
         SmartDashboard.putBoolean("running", false);
