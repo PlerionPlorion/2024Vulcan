@@ -16,7 +16,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -59,9 +59,9 @@ public class Arm extends SubsystemBase{
 
       if (Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)) >= 0.2) { //It subtracts where it wants to go from where it is
       setpoint.position = -leftEncoder.getPosition().getValueAsDouble()*2; //The arm is where it is
-      SmartDashboard.putBoolean("running", true);
+      // SmartDashboard.putBoolean("running", true);
       } else {
-        SmartDashboard.putBoolean("running", false);
+        // SmartDashboard.putBoolean("running", false);
       }
       ffVolts = getGravityFF() + getVelocityFF(setpoint.velocity);
       //setPIDFF(setpoint.position, ffVolts);
@@ -75,11 +75,11 @@ public class Arm extends SubsystemBase{
     }
     //setVolts(getGravityFF() + Constants.ArmConstants.K_V * 5 + Constants.ArmConstants.K_S);
     // SmartDashboard.putNumber("ffVolts", ffVolts);
-    SmartDashboard.putNumber("Setpoint", setpoint.position);
-    SmartDashboard.putNumber("SetpointVelocity", setpoint.velocity);
-    SmartDashboard.putNumber("leftEncRelative", -leftEncoder.getPosition().getValueAsDouble()*2);
-    SmartDashboard.putNumber("DesiredState", desiredState.position);
-    SmartDashboard.putNumber("EncoderDiff", Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)));
+    // SmartDashboard.putNumber("Setpoint", setpoint.position);
+    // SmartDashboard.putNumber("SetpointVelocity", setpoint.velocity);
+    // SmartDashboard.putNumber("leftEncRelative", -leftEncoder.getPosition().getValueAsDouble()*2);
+    // SmartDashboard.putNumber("DesiredState", desiredState.position);
+    // SmartDashboard.putNumber("EncoderDiff", Math.abs(Math.abs(desiredState.position) - Math.abs(leftEncoder.getPosition().getValueAsDouble()*2)));
     // SmartDashboard.putNumber("leftEncoderVelocity", (-leftEncoder.getVelocity().getValueAsDouble()*90));
     // SmartDashboard.putNumber("VoltageLeft", leftArmMotor.getAppliedOutput());
     // SmartDashboard.putNumber("VoltageRight", rightArmMotor.getAppliedOutput());

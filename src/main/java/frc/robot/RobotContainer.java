@@ -1,13 +1,17 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autos.exampleAuto;
 import frc.robot.commands.TeleopArm;
 import frc.robot.commands.TeleopClimb;
 import frc.robot.commands.TeleopIntake;
@@ -35,6 +39,9 @@ public class RobotContainer {
     public final IntakePivot intakePivot = new IntakePivot();
     public final Climber climber = new Climber();
 
+    /* PathPlanner */
+    private final SendableChooser<Command> autoChooser;
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
@@ -57,6 +64,10 @@ public class RobotContainer {
     //private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -50, 99).withTimeout(1.5));
+        NamedCommands.registerCommand("Intake", new TeleopIntake(intake, 1, 2));
+        NamedCommands.registerCommand("Shoot", new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.2), new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
+        NamedCommands.registerCommand("ArmZero", new TeleopArm(arm, intakePivot, 0, 0).withTimeout(2));
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve,
@@ -70,6 +81,9 @@ public class RobotContainer {
             new TeleopClimb(climber,
              () -> -operator.getRawAxis(climbAxis))
         );
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -95,7 +109,7 @@ public class RobotContainer {
         // },
         // Arm));
         intakeButton.onTrue(new TeleopIntake(intake, 1, 0.3));
-        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 2)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
+        shootButton.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.2), new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
         spit.whileTrue(new TeleopIntake(intake, -1, 0));
         forceIntake.whileTrue(new TeleopIntake(intake, 1, 0));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
@@ -112,6 +126,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return autoChooser.getSelected();
     }
 }
