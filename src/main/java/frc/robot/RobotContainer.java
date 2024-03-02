@@ -64,9 +64,10 @@ public class RobotContainer {
     //private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -50, 99).withTimeout(1.5));
+        NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -45, 99).withTimeout(2));
         NamedCommands.registerCommand("Intake", new TeleopIntake(intake, 1, 2));
-        NamedCommands.registerCommand("Shoot", new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.2), new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
+        NamedCommands.registerCommand("Shoot", new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.5, 1))));
+        NamedCommands.registerCommand("ShootSecond", new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
         NamedCommands.registerCommand("ArmZero", new TeleopArm(arm, intakePivot, 0, 0).withTimeout(2));
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
@@ -109,12 +110,12 @@ public class RobotContainer {
         // },
         // Arm));
         intakeButton.onTrue(new TeleopIntake(intake, 1, 0.3));
-        shootButton.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.2), new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.4, 1))));
+        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
         spit.whileTrue(new TeleopIntake(intake, -1, 0));
         forceIntake.whileTrue(new TeleopIntake(intake, 1, 0));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
         // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
-        IntakePos.onTrue(new TeleopArm(arm, intakePivot, -50, 99));
+        IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
         ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
         amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25), new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1)).andThen(new TeleopIntake(intake, -0.3, 1)));
     }
@@ -125,7 +126,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
         return autoChooser.getSelected();
     }
 }

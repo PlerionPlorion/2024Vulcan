@@ -41,7 +41,6 @@ public class TeleopShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.shoot(0);
-
   }
 
   // Returns true when the command should end.
