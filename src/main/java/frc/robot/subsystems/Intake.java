@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
     private CANSparkFlex intakeMotor = new CANSparkFlex(2, MotorType.kBrushless);
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+  }
 
   @Override
   public void periodic() {

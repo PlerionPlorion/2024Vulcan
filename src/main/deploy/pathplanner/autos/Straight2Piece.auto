@@ -43,6 +43,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "IntakePos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "Shoot"
                 }
               },
