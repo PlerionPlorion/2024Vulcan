@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
-      "y": 5.550936522700434
+      "x": 0.8221644973960404,
+      "y": 6.569779302183426
     },
-    "rotation": 0
+    "rotation": 61.260204708311846
   },
   "command": {
     "type": "sequential",
@@ -33,7 +33,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight2Piece"
+            "pathName": "Amp2Piece"
           }
         },
         {

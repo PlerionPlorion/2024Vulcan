@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
-      "y": 5.550936522700434
+      "x": 0.8338753339418218,
+      "y": 4.496961233580098
     },
-    "rotation": 0
+    "rotation": -57.994616791916435
   },
   "command": {
     "type": "sequential",
@@ -33,13 +33,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight2Piece"
+            "pathName": "Source2Piece"
           }
         },
         {
           "type": "sequential",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePos"
+                }
+              },
               {
                 "type": "named",
                 "data": {
