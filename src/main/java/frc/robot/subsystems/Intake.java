@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
     private CANSparkFlex intakeMotor = new CANSparkFlex(2, MotorType.kBrushless);
+    private CANSparkFlex reverseIntakeMotor = new CANSparkFlex(3, MotorType.kBrushless);
   /** Creates a new Intake. */
   public Intake() {
   }
@@ -20,11 +21,11 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   
-  public void intake(double speed) {
+  public void intake(double speed, boolean motor) {
+    if(motor == true) {
     intakeMotor.set(speed);
-  }
-  public void retract() {
-    intakeMotor.set(-0.1);
-    
+    } else if (motor == false) {
+    reverseIntakeMotor.set(speed);
+    }
   }
 }

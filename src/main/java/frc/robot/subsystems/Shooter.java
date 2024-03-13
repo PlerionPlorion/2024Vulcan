@@ -4,14 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
-    private CANSparkFlex shooterRight = new CANSparkFlex(3, MotorType.kBrushless);
-  private CANSparkFlex shooterLeft = new CANSparkFlex(4, MotorType.kBrushless);
+ // private CANSparkFlex shooterRight = new CANSparkFlex(3, MotorType.kBrushless);
+ // private CANSparkFlex shooterLeft = new CANSparkFlex(4, MotorType.kBrushless);
   /** Creates a new Shooter. */
   public Shooter() {
   }
@@ -23,7 +20,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot(double speed) {
-    shooterLeft.set(-speed);
-    shooterRight.set(speed);
+    //shooterLeft.set(-speed);
+    //shooterRight.set(speed);
   }
 }

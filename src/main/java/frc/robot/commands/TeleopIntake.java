@@ -13,12 +13,14 @@ public class TeleopIntake extends Command {
   private Intake intake;
   private int counter = 0;
   private int target = 0;
+  boolean motorSide;
   /** Creates a new Shooter. */
-  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds) {
+  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds, boolean motorSide) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intakeSpeedSup = intakeSpeedSup;
     this.intake = intake;
+    this.motorSide = motorSide;
     target = (int)( seconds * 50 );
   }
 
@@ -35,12 +37,13 @@ public class TeleopIntake extends Command {
     if(target != 0) {
     if(counter < target) {
       counter++;
-      intake.intake(intakeSpeedVal);
+      intake.intake(intakeSpeedVal, motorSide);
     }
   } else {
-    intake.intake(intakeSpeedVal);
+    intake.intake(intakeSpeedVal, motorSide);
   }
     SmartDashboard.putNumber("counter", counter);
+    SmartDashboard.putBoolean("intakeMotorBool", motorSide);
   }
 
     // Returns true when the command should end.
@@ -56,7 +59,7 @@ public class TeleopIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.intake(0);
+    intake.intake(0, motorSide);
     SmartDashboard.putBoolean("intake", interrupted);
 
   }
