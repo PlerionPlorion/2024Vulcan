@@ -27,9 +27,12 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -64,8 +67,11 @@ public class RobotContainer {
     private final JoystickButton forceIntake = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton limeDrive = new JoystickButton(driver, 9);
+
     // public boolean gyroCheck;
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     public RobotContainer() {
 
         SmartDashboard.putBoolean("RobotGyro", s_Swerve.getGyroCheck());
@@ -85,21 +91,18 @@ public class RobotContainer {
                                 new TeleopShooter(shooter, 0.6, 1))));
 
         NamedCommands.registerCommand("ArmZero", new TeleopArm(arm, intakePivot, 0, 0).withTimeout(2));
-        
+
         s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve,
-                () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis),
-                () -> -driver.getRawAxis(rotationAxis),
-                () -> robotCentric.getAsBoolean()
-            )
-        );
-        
+                new TeleopSwerve(
+                        s_Swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
+                        () -> robotCentric.getAsBoolean()));
+
         climber.setDefaultCommand(
-            new TeleopClimb(climber,
-             () -> -operator.getRawAxis(climbAxis))
-        );
+                new TeleopClimb(climber,
+                        () -> -operator.getRawAxis(climbAxis)));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -109,47 +112,49 @@ public class RobotContainer {
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    
+
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // IntakePos.onTrue(Commands.runOnce(()->{
-        //     // Degrees
-        //     Arm.setAngle(90);
+        // // Degrees
+        // Arm.setAngle(90);
         // },
         // Arm));
         // ArmZero.onTrue(Commands.runOnce(()->{
-        //     Arm.setAngle(0);
+        // Arm.setAngle(0);
 
         // },
         // Arm));
-        
+
         shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, s_Swerve::getGyroCheck)
                 .andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(
                         new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck), new TeleopShooter(shooter, 0.6, 1))));
-        
+
         PerimeterShot.onTrue(new ParallelCommandGroup(new TeleopArm(arm, intakePivot, -35, 0),
                 (new TeleopIntake(intake, -0.1, 0.2, s_Swerve::getGyroCheck).andThen(new TeleopShooter(shooter, 0.8, 1))
                         .andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
                                 new TeleopShooter(shooter, 9, 1))))));
-        
+
         spit.whileTrue(new TeleopIntake(intake, -1, 0, s_Swerve::getGyroCheck));
-        
+
         forceIntake.whileTrue(new TeleopIntake(intake, 1, 0, s_Swerve::getGyroCheck));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
         // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
         IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
         ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
-        
+
         amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25, s_Swerve::getGyroCheck),
                 new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1))
                 .andThen(new TeleopIntake(intake, -0.3, 1, s_Swerve::getGyroCheck)));
-        
+
         limeDrive.whileTrue(new TeleopLimelightDrive(s_Swerve, limelight, intakePivot, false));
     }
 
