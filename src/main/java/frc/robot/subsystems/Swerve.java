@@ -171,7 +171,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var alliance = DriverStation.getAlliance();
+        //var alliance = DriverStation.getAlliance();
         if(getHeading().getDegrees() >= -90 && getHeading().getDegrees() <= 90){
             gyroCheck = true;
             SmartDashboard.putBoolean("GyroYaw", true);
