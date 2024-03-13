@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.TeleopArm;
 import frc.robot.commands.TeleopClimb;
 import frc.robot.commands.TeleopIntake;
+import frc.robot.commands.TeleopLimelightDrive;
 import frc.robot.commands.TeleopShooter;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -38,7 +40,7 @@ public class RobotContainer {
     public final Intake intake = new Intake();
     public final IntakePivot intakePivot = new IntakePivot();
     public final Climber climber = new Climber();
-
+    public final Limelight limelight = new Limelight();
     /* PathPlanner */
     private final SendableChooser<Command> autoChooser;
 
@@ -61,6 +63,7 @@ public class RobotContainer {
     private final JoystickButton spit = new JoystickButton(operator, 7);
     private final JoystickButton forceIntake = new JoystickButton(operator, 8);
     private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton limeDrive = new JoystickButton(driver, 9);
     //private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -118,6 +121,7 @@ public class RobotContainer {
         IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
         ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
         amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25), new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1)).andThen(new TeleopIntake(intake, -0.3, 1)));
+        limeDrive.whileTrue(new TeleopLimelightDrive(s_Swerve, limelight, intakePivot, false));
     }
 
     /**
