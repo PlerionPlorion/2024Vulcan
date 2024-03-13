@@ -58,10 +58,10 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton IntakePos = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton ArmZero = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton PerimeterShot = new JoystickButton(operator, 10);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton spit = new JoystickButton(operator, 7);
-    private final JoystickButton forceIntake = new JoystickButton(operator, 8);
+    private final JoystickButton forceIntake = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton limeDrive = new JoystickButton(driver, 9);
     //private final JoystickButton intake90 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
@@ -69,7 +69,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -45, 99).withTimeout(2));
         NamedCommands.registerCommand("Intake", new TeleopIntake(intake, 1, 2));
-        NamedCommands.registerCommand("Shoot", new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.5, 1))));
+        NamedCommands.registerCommand("Shoot", new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
         NamedCommands.registerCommand("ShootSecond", new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
         NamedCommands.registerCommand("ArmZero", new TeleopArm(arm, intakePivot, 0, 0).withTimeout(2));
         s_Swerve.setDefaultCommand(
@@ -112,8 +112,9 @@ public class RobotContainer {
 
         // },
         // Arm));
-        intakeButton.onTrue(new TeleopIntake(intake, 1, 0.3));
-        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
+        
+        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 0.6, 1))));
+        PerimeterShot.onTrue(new ParallelCommandGroup(new TeleopArm(arm, intakePivot, -35, 0), (new TeleopIntake(intake, -0.1, 0.2).andThen(new TeleopShooter(shooter, 0.8, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1), new TeleopShooter(shooter, 9, 1))))));
         spit.whileTrue(new TeleopIntake(intake, -1, 0));
         forceIntake.whileTrue(new TeleopIntake(intake, 1, 0));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));

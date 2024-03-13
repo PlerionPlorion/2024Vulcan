@@ -33,7 +33,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source2PieceMid"
+            "pathName": "Source2Piece"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmZero"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SourceMid"
           }
         }
       ]
