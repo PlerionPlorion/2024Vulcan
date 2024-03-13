@@ -165,20 +165,19 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public boolean gyroCheck() {
-        return getHeading().getDegrees() >= -90 && getHeading().getDegrees() <= 90;
+    public static boolean gyroCheckMethod() {
+        return gyroCheck;
     }
     @Override
     public void periodic() {
-        // var alliance = DriverStation.getAlliance();
-        // if(getHeading().getDegrees() >= -90 && getHeading().getDegrees() <= 90){
-        //     gyroCheck = true;
-        //     SmartDashboard.putBoolean("GyroYaw", true);
-        //   } else {
-        //     gyroCheck = false;
-        //     SmartDashboard.putBoolean("GyroYaw", false);
-        //   }
-        //   gyroCheck();
+        var alliance = DriverStation.getAlliance();
+        if(getHeading().getDegrees() >= -90 && getHeading().getDegrees() <= 90){
+            gyroCheck = true;
+            SmartDashboard.putBoolean("GyroYaw", true);
+          } else {
+            gyroCheck = false;
+            SmartDashboard.putBoolean("GyroYaw", false);
+          }
         //   if (alliance.get() == DriverStation.Alliance.Red) {
         //     if(getHeading().getDegrees() >= -180 && getHeading().getDegrees() <= 0){
         //         ampGyroCheck = true;
