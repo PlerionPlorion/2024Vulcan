@@ -165,9 +165,10 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public static boolean gyroCheckMethod() {
+    public boolean getGyroCheck(){
         return gyroCheck;
     }
+
     @Override
     public void periodic() {
         var alliance = DriverStation.getAlliance();

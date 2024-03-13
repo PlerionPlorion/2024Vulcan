@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
@@ -13,9 +15,9 @@ public class TeleopIntake extends Command {
   private Intake intake;
   private int counter = 0;
   private int target = 0;
-  boolean motorSide;
+  BooleanSupplier motorSide;
   /** Creates a new Shooter. */
-  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds, boolean motorSide) {
+  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds, BooleanSupplier motorSide) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intakeSpeedSup = intakeSpeedSup;
@@ -37,13 +39,13 @@ public class TeleopIntake extends Command {
     if(target != 0) {
     if(counter < target) {
       counter++;
-      intake.intake(intakeSpeedVal, motorSide);
+      intake.intake(intakeSpeedVal, motorSide.getAsBoolean());
     }
   } else {
-    intake.intake(intakeSpeedVal, motorSide);
+    intake.intake(intakeSpeedVal, motorSide.getAsBoolean());
   }
     SmartDashboard.putNumber("counter", counter);
-    SmartDashboard.putBoolean("intakeMotorBool", motorSide);
+    SmartDashboard.putBoolean("intakeMotorBool", motorSide.getAsBoolean());
   }
 
     // Returns true when the command should end.
@@ -59,7 +61,7 @@ public class TeleopIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.intake(0, motorSide);
+    intake.intake(0, motorSide.getAsBoolean());
     SmartDashboard.putBoolean("intake", interrupted);
 
   }
