@@ -64,15 +64,14 @@ public class RobotContainer {
     private final JoystickButton forceIntake = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton limeDrive = new JoystickButton(driver, 9);
-    public boolean gyroCheck;
+    // public boolean gyroCheck;
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        new InstantCommand((() -> gyroCheck = s_Swerve.getHeading().getDegrees() >= -90 && s_Swerve.getHeading().getDegrees() <= 90));
-        SmartDashboard.putBoolean("RobotGyro", gyroCheck);
+        SmartDashboard.putBoolean("RobotGyro", Swerve.gyroCheckMethod());
         NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -45, 99).withTimeout(2));
-        NamedCommands.registerCommand("Intake", new TeleopIntake(intake, 1, 2, gyroCheck));
-        NamedCommands.registerCommand("Shoot", new TeleopIntake(intake, -0.1, 0.2, gyroCheck).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, gyroCheck), new TeleopShooter(shooter, 0.6, 1))));
-        NamedCommands.registerCommand("ShootSecond", new TeleopIntake(intake, -0.1, 0.2, gyroCheck).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, gyroCheck), new TeleopShooter(shooter, 0.6, 1))));
+        NamedCommands.registerCommand("Intake", new TeleopIntake(intake, 1, 2, Swerve.gyroCheckMethod()));
+        NamedCommands.registerCommand("Shoot", new TeleopIntake(intake, -0.1, 0.2, Swerve.gyroCheckMethod()).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, Swerve.gyroCheckMethod()), new TeleopShooter(shooter, 0.6, 1))));
+        NamedCommands.registerCommand("ShootSecond", new TeleopIntake(intake, -0.1, 0.2, Swerve.gyroCheckMethod()).andThen(new TeleopShooter(shooter, 0.4, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, Swerve.gyroCheckMethod()), new TeleopShooter(shooter, 0.6, 1))));
         NamedCommands.registerCommand("ArmZero", new TeleopArm(arm, intakePivot, 0, 0).withTimeout(2));
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
@@ -116,15 +115,15 @@ public class RobotContainer {
         // },
         // Arm));
         
-        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, gyroCheck).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, gyroCheck), new TeleopShooter(shooter, 0.6, 1))));
-        PerimeterShot.onTrue(new ParallelCommandGroup(new TeleopArm(arm, intakePivot, -35, 0), (new TeleopIntake(intake, -0.1, 0.2, gyroCheck).andThen(new TeleopShooter(shooter, 0.8, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, gyroCheck), new TeleopShooter(shooter, 9, 1))))));
-        spit.whileTrue(new TeleopIntake(intake, -1, 0, gyroCheck));
-        forceIntake.whileTrue(new TeleopIntake(intake, 1, 0, gyroCheck));
+        shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, Swerve.gyroCheckMethod()).andThen(new TeleopShooter(shooter, 0.45, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, Swerve.gyroCheckMethod()), new TeleopShooter(shooter, 0.6, 1))));
+        PerimeterShot.onTrue(new ParallelCommandGroup(new TeleopArm(arm, intakePivot, -35, 0), (new TeleopIntake(intake, -0.1, 0.2, Swerve.gyroCheckMethod()).andThen(new TeleopShooter(shooter, 0.8, 1)).andThen(new ParallelCommandGroup(new TeleopIntake(intake, 1, 1, Swerve.gyroCheckMethod()), new TeleopShooter(shooter, 9, 1))))));
+        spit.whileTrue(new TeleopIntake(intake, -1, 0, Swerve.gyroCheckMethod()));
+        forceIntake.whileTrue(new TeleopIntake(intake, 1, 0, Swerve.gyroCheckMethod()));
         // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
         // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
         IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
         ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
-        amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25, gyroCheck), new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1)).andThen(new TeleopIntake(intake, -0.3, 1, gyroCheck)));
+        amp.onTrue(new ParallelCommandGroup(new TeleopIntake(intake, -0.1, 0.25, Swerve.gyroCheckMethod()), new TeleopArm(arm, intakePivot, -25, 15).withTimeout(1)).andThen(new TeleopIntake(intake, -0.3, 1, Swerve.gyroCheckMethod())));
         limeDrive.whileTrue(new TeleopLimelightDrive(s_Swerve, limelight, intakePivot, false));
     }
 

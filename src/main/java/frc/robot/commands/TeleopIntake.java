@@ -15,7 +15,7 @@ public class TeleopIntake extends Command {
   private int target = 0;
   boolean motorSide;
   /** Creates a new Shooter. */
-  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds, boolean motorSide) {
+  public TeleopIntake(Intake intake, double intakeSpeedSup, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intakeSpeedSup = intakeSpeedSup;
