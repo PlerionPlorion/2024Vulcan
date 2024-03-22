@@ -4,23 +4,19 @@
 
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class TeleopShooter extends Command {
+public class AutoShooter extends Command {
   private double shooterSpeedSup;
   private Intake shooter;
   private int counter = 0;
   private int target = 0;
-  BooleanSupplier motorSide;
   /** Creates a new Shooter. */
-  public TeleopShooter(Intake shooter, double shooterSpeedSup, double seconds, BooleanSupplier motorSide) {
+  public AutoShooter(Intake shooter, double shooterSpeedSup, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.shooterSpeedSup = shooterSpeedSup;
-    this.motorSide = motorSide;
     target = (int)( seconds * 50 );
   }
 
@@ -36,14 +32,14 @@ public class TeleopShooter extends Command {
     double shooterSpeedVal = shooterSpeedSup;
     if(counter < target) {
       counter++;
-      shooter.shoot(shooterSpeedVal, motorSide.getAsBoolean());
+      shooter.shoot(shooterSpeedVal, false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.shoot(0, motorSide.getAsBoolean());
+    shooter.shoot(0, false);
   }
 
   // Returns true when the command should end.

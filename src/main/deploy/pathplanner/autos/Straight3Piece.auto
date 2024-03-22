@@ -61,10 +61,34 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmZero"
+                  "name": "IntakePos"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight3PiecePart2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmZero"
           }
         }
       ]

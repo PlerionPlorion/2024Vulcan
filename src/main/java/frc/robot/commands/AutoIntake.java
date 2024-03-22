@@ -4,23 +4,21 @@
 
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class TeleopShooter extends Command {
-  private double shooterSpeedSup;
-  private Intake shooter;
+public class AutoIntake extends Command {
+  private double intakeSpeedSup;
+  private Intake intake;
   private int counter = 0;
   private int target = 0;
-  BooleanSupplier motorSide;
   /** Creates a new Shooter. */
-  public TeleopShooter(Intake shooter, double shooterSpeedSup, double seconds, BooleanSupplier motorSide) {
+  public AutoIntake(Intake intake, double intakeSpeedSup, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.shooter = shooter;
-    this.shooterSpeedSup = shooterSpeedSup;
-    this.motorSide = motorSide;
+    addRequirements(intake);
+    this.intakeSpeedSup = intakeSpeedSup;
+    this.intake = intake;
     target = (int)( seconds * 50 );
   }
 
@@ -33,22 +31,36 @@ public class TeleopShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double shooterSpeedVal = shooterSpeedSup;
+    double intakeSpeedVal = intakeSpeedSup;
+    if(target != 0) {
     if(counter < target) {
       counter++;
-      shooter.shoot(shooterSpeedVal, motorSide.getAsBoolean());
+      intake.intake(intakeSpeedVal, false);
     }
+  } else {
+    intake.intake(intakeSpeedVal, false);
   }
+    SmartDashboard.putNumber("counter", counter);
+    SmartDashboard.putBoolean("intakeMotorBool", false);
+  }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+      if(target != 0) {
+      return counter >= target;
+      } else {
+        return false;
+      }
+    }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.shoot(0, motorSide.getAsBoolean());
+    intake.intake(0, false);
+    SmartDashboard.putBoolean("intake", interrupted);
+
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return counter >= target;
-  }
+
 }

@@ -21,14 +21,17 @@ public class Climber extends SubsystemBase {
     supplyLimit.withStatorCurrentLimit(25);
     supplyLimit.withSupplyCurrentLimit(30);
     climberFX.getConfigurator().apply(supplyLimit, 0.05);
+    encoderDouble = climberFX.getRotorPosition().getValueAsDouble();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
   }
   public void climb(double speed) {
     climberFX.set(speed);
+  }
+  public void encodedClimb(double position) {
+    climberFX.setControl(request.withPosition(position+encoderDouble));
   }
 }

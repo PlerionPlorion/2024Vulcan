@@ -45,12 +45,12 @@ public class Limelight extends SubsystemBase {
     targetingAngularVelocity *= Constants.Swerve.maxAngularVelocity;
 
     //invert since tx is positive when the target is to the right of the crosshair
-    targetingAngularVelocity *= -0.3;
-    if (Math.abs(LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getAngle()) >= 0.5) {
-      SmartDashboard.putNumber("botPoseZ", LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getZ());
+    targetingAngularVelocity *= -0.03;
+    if (Math.abs(LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getAngle()) >= 2) {
+      SmartDashboard.putNumber("botPoseZ", LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getAngle());
     return targetingAngularVelocity;
     } else {
-      SmartDashboard.putNumber("botPoseZ", LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getZ());
+      SmartDashboard.putNumber("botPoseZ", LimelightHelpers.getBotPose3d_TargetSpace(limelightName).getRotation().getAngle());
       return 0;
     }
   }

@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -15,17 +16,19 @@ public class TeleopLimelightDrive extends Command {
   Swerve swerve;
   Limelight limelight;
   IntakePivot intake;
+  Arm arm;
   boolean amp;
   ChassisSpeeds relativeSpeed;
   boolean gyro;
   int invert;
   /** Creates a new TeleopLimelightDrive. */
-  public TeleopLimelightDrive(Swerve swerve, Limelight limelight, IntakePivot intake, boolean amp) {
+  public TeleopLimelightDrive(Swerve swerve, Limelight limelight, IntakePivot intake, Arm arm, boolean amp) {
     this.swerve = swerve;
     this.limelight = limelight;
     this.intake = intake;
+    this.arm = arm;
     this.amp = amp;
-    addRequirements(swerve, limelight, intake);
+    addRequirements(swerve, limelight, intake, arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -33,11 +36,11 @@ public class TeleopLimelightDrive extends Command {
   @Override
   public void initialize() {
     if(swerve.getHeading().getDegrees() >= -90 && swerve.getHeading().getDegrees() <= 90){
-      gyro = true;
-      invert = 1;
-    } else {
       gyro = false;
       invert = -1;
+    } else {
+      gyro = true;
+      invert = 1;
     }
     limelight.gyroControl(gyro);
     limelight.limelightTagMode(true);
@@ -47,23 +50,24 @@ public class TeleopLimelightDrive extends Command {
   @Override
   public void execute() {
         if(swerve.getHeading().getDegrees() >= -90 && swerve.getHeading().getDegrees() <= 90){
-          gyro = true;
-          invert = 1;
-        } else {
           gyro = false;
           invert = -1;
+        } else {
+          gyro = true;
+          invert = 1;
         }
         limelight.gyroControl(gyro);
         SmartDashboard.putBoolean("gyroBool", gyro);
             /* Get Values, Deadband*/
         double translationVal = limelight.limelight_range_proportional() * invert;
         double strafeVal = limelight.limelight_strafe_proportional() * invert;
-        double rotationVal = limelight.limelight_aim_proportional() * invert;
-        relativeSpeed = new ChassisSpeeds(translationVal, strafeVal, rotationVal);
+        double rotationVal = limelight.limelight_aim_proportional();
+        relativeSpeed = new ChassisSpeeds(translationVal, strafeVal, 0);
         /* Drive */
         swerve.driveRobotRelative(relativeSpeed);
         if(amp != true) {
-          intake.setAngle((translationVal+45)*invert, 0);
+          intake.setAngle((45)*invert, 0);
+          arm.setAngle((-10)*invert);
         }
   }
 

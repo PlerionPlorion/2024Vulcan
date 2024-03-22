@@ -4,16 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private CANSparkFlex intakeMotor = new CANSparkFlex(2, MotorType.kBrushless);
-    private CANSparkFlex reverseIntakeMotor = new CANSparkFlex(3, MotorType.kBrushless);
+    private CANSparkFlex reverseIntakeMotor = new CANSparkFlex(2, MotorType.kBrushless);
+    private CANSparkFlex intakeMotor = new CANSparkFlex(3, MotorType.kBrushless);
   /** Creates a new Intake. */
   public Intake() {
+    reverseIntakeMotor.setIdleMode(IdleMode.kBrake);
+    intakeMotor.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
@@ -22,10 +25,21 @@ public class Intake extends SubsystemBase {
   }
   
   public void intake(double speed, boolean motor) {
-    if(motor == true) {
+    if(motor == false) {
+    reverseIntakeMotor.set(-speed);
+    } else if (motor == true) {
     intakeMotor.set(speed);
-    } else if (motor == false) {
-    reverseIntakeMotor.set(speed);
     }
+  }
+  public void manualIntake(double speed) {
+    reverseIntakeMotor.set(-speed);
+    intakeMotor.set(speed);
+  }
+  public void shoot(double speed, boolean motor) {
+    if(motor == true) {
+      reverseIntakeMotor.set(speed);
+      } else if (motor == false) {
+      intakeMotor.set(-speed);
+      }
   }
 }
