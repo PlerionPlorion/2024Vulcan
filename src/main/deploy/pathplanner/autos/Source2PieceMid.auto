@@ -18,13 +18,19 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePos"
+                  "name": "FastShootPos"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePos"
                 }
               }
             ]

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8221644973960404,
-      "y": 6.569779302183426
+      "x": 0.6807503073695607,
+      "y": 6.630585568863446
     },
     "rotation": 61.260204708311846
   },
@@ -18,13 +18,19 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePos"
+                  "name": "FastShootPos"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePos"
                 }
               }
             ]
@@ -43,7 +49,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePos"
+                  "name": "ShootPos"
                 }
               },
               {

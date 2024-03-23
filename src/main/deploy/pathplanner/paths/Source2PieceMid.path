@@ -101,6 +101,12 @@
             {
               "type": "named",
               "data": {
+                "name": "ShootPos"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
                 "name": "Shoot"
               }
             },
