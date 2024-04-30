@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8338753339418218,
-      "y": 4.496961233580098
+      "x": 1.3140196323188638,
+      "y": 5.550936522700434
     },
-    "rotation": -57.994616791916435
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -26,6 +26,12 @@
                 "data": {
                   "name": "Shoot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePos"
+                }
               }
             ]
           }
@@ -33,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source2Piece"
+            "pathName": "Straight2Piece"
           }
         },
         {
@@ -55,10 +61,34 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmZero"
+                  "name": "IntakePos"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source3PiecePart2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootPos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmZero"
           }
         }
       ]

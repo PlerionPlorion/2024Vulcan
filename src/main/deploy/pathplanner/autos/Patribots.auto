@@ -2,38 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8338753339418218,
-      "y": 4.496961233580098
+      "x": 0.5053379907329615,
+      "y": 2.058171181869431
     },
-    "rotation": -57.994616791916435
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "FastShootPos"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              }
-            ]
+            "pathName": "Patribots0.5"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Source2Piece"
+            "name": "FastShootPos"
           }
         },
         {
@@ -51,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SourceMid"
+            "pathName": "Patribots"
           }
         }
       ]

@@ -66,7 +66,7 @@ public class TeleopLimelightDrive extends Command {
         /* Drive */
         swerve.driveRobotRelative(relativeSpeed);
         if(amp != true) {
-          intake.setAngle((45)*invert, 0);
+          intake.setAngle((37)*invert, 0);
           arm.setAngle((-10)*invert);
         }
   }

@@ -83,15 +83,16 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("IntakePos", new TeleopArm(arm, intakePivot, -60, 98).withTimeout(1));
 
-                NamedCommands.registerCommand("ShootPos", new TeleopArm(arm, intakePivot, -65, 15).withTimeout(1));
+                NamedCommands.registerCommand("ShootPos", new TeleopArm(arm, intakePivot, -65, 12).withTimeout(1));
 
-                NamedCommands.registerCommand("FastShootPos", new TeleopArm(arm, intakePivot, -65, 15).withTimeout(0.5));
+                NamedCommands.registerCommand("FastShootPos", new TeleopArm(arm, intakePivot, -65, 12).withTimeout(0.5));
 
                 NamedCommands.registerCommand("Intake", new ManualIntake(intake, 1, 0.7));
 
                 NamedCommands.registerCommand("Shoot",
                                 new AutoIntake(intake, -0.1, 0.2)
-                .andThen(new ParallelCommandGroup(
+                        .andThen(new AutoShooter(intake, 1, 0.25))
+                        .andThen(new ParallelCommandGroup(
                         new AutoIntake(intake, 1, 1),
                         new AutoShooter(intake, 1, 1))));
 
@@ -152,7 +153,8 @@ public class RobotContainer {
                 //                                 new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
                 //                                 new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
 
-                shootButton.onTrue(new TeleopIntake(intake, -0.15, 0.2, s_Swerve::getGyroCheck)
+                shootButton.onTrue(new TeleopIntake(intake, -0.15, 0.24, s_Swerve::getGyroCheck)
+                .andThen(new TeleopShooter(intake, 1, 0.25, s_Swerve::getGyroCheck))
                 .andThen(new ParallelCommandGroup(
                                 new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
                                 new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
