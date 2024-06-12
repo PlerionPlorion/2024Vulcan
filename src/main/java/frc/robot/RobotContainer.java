@@ -147,11 +147,11 @@ public class RobotContainer {
                 // },
                 // Arm));
 
-                // shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, s_Swerve::getGyroCheck)
-                //                 .andThen(new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))
-                //                 .andThen(new ParallelCommandGroup(
-                //                                 new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
-                //                                 new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
+                shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, s_Swerve::getGyroCheck)
+                                .andThen(new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))
+                                .andThen(new ParallelCommandGroup(
+                                                new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
+                                                new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
 
                 shootButton.onTrue(new TeleopIntake(intake, -0.15, 0.24, s_Swerve::getGyroCheck)
                 .andThen(new TeleopShooter(intake, 1, 0.25, s_Swerve::getGyroCheck))
@@ -174,7 +174,7 @@ public class RobotContainer {
                 forceIntake.whileTrue(new ManualIntake(intake, 1, 0));
                 // intake90.onTrue(new InstantCommand(()-> intakePivot.setAngle(90, 0)));
                 // intakeZero.onTrue(new InstantCommand(()-> intakePivot.setAngle(0, 0)));
-                //IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
+                // IntakePos.onTrue(new TeleopArm(arm, intakePivot, -45, 99));
                 ArmZero.onTrue(new TeleopArm(arm, intakePivot, 0, 0));
 
                 amp.onTrue(new AmpArm(arm, intakePivot, climber, -40, 20, 100, s_Swerve::getAmpGyroCheck).withTimeout(1));
@@ -190,6 +190,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                return autoChooser.getSelected();
+                // return autoChooser.getSelected();
+                return null;
         }
 }
