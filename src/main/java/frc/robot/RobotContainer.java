@@ -62,17 +62,17 @@ public class RobotContainer {
         private final int rotationAxis = XboxController.Axis.kRightX.value;
         private final int climbAxis = XboxController.Axis.kRightY.value;
         /* Driver Buttons */
-        private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+        private final JoystickButton zeroGyro = new JoystickButton(operator, 10);
         private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kStart.value);
         // private final JoystickButton IntakePos = new JoystickButton(operator, XboxController.Button.kX.value);
         private final JoystickButton ArmZero = new JoystickButton(operator, XboxController.Button.kB.value);
-        private final JoystickButton PerimeterShot = new JoystickButton(operator, 10);
+        // private final JoystickButton PerimeterShot = new JoystickButton(operator, 10);
         private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kA.value);
         private final JoystickButton spit = new JoystickButton(operator, 7);
         private final JoystickButton forceIntake = new JoystickButton(operator, XboxController.Button.kY.value);
         private final JoystickButton amp = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        private final JoystickButton limeDrive = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-
+        private final JoystickButton limeDrive = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        private final double speedMod = 0.35;
         // public boolean gyroCheck;
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -108,14 +108,14 @@ public class RobotContainer {
                 s_Swerve.setDefaultCommand(
                                 new TeleopSwerve(
                                                 s_Swerve,
-                                                () -> -driver.getRawAxis(translationAxis),
-                                                () -> -driver.getRawAxis(strafeAxis),
-                                                () -> -driver.getRawAxis(rotationAxis),
+                                                () -> -operator.getRawAxis(strafeAxis)*speedMod,
+                                                () -> operator.getRawAxis(translationAxis)*speedMod,
+                                                () -> -operator.getRawAxis(rotationAxis)*speedMod,
                                                 () -> robotCentric.getAsBoolean()));
 
-                climber.setDefaultCommand(
-                                new TeleopClimb(climber,
-                                                () -> -operator.getRawAxis(climbAxis)));
+                // climber.setDefaultCommand(
+                //                 new TeleopClimb(climber,
+                //                                 () -> -operator.getRawAxis(climbAxis)));
 
                 autoChooser = AutoBuilder.buildAutoChooser();
                 SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -147,13 +147,13 @@ public class RobotContainer {
                 // },
                 // Arm));
 
-                shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.2, s_Swerve::getGyroCheck)
-                                .andThen(new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))
-                                .andThen(new ParallelCommandGroup(
-                                                new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
-                                                new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
+                // shootButton.onTrue(new TeleopIntake(intake, -0.1, 0.14, s_Swerve::getGyroCheck)
+                //                 .andThen(new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))
+                //                 .andThen(new ParallelCommandGroup(
+                //                                 new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
+                //                                 new TeleopShooter(intake, 1, 1, s_Swerve::getGyroCheck))));
 
-                shootButton.onTrue(new TeleopIntake(intake, -0.15, 0.24, s_Swerve::getGyroCheck)
+                shootButton.onTrue(new TeleopIntake(intake, -0.15, 0.2, s_Swerve::getGyroCheck)
                 .andThen(new TeleopShooter(intake, 1, 0.25, s_Swerve::getGyroCheck))
                 .andThen(new ParallelCommandGroup(
                                 new TeleopIntake(intake, 1, 1, s_Swerve::getGyroCheck),
